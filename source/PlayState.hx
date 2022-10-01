@@ -1145,9 +1145,7 @@ hudGroup.add(scoreTxt);
 						sustainNote.scrollFactor.set();
 						unspawnNotes.push(sustainNote);
 	
-						
-						if (FlxG.save.data.middleScroll)
-							sustainNote.x -= 500;
+							sustainNote.x = swagNote.x + 50;
 						
 	
 						sustainNote.mustPress = gottaHitNote;
