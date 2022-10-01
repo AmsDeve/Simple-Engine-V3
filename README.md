@@ -5,10 +5,11 @@
 # Desc
 
 **SIMPLE ENGINE V3 ITS HERE!!**
-**WHIT MORE STUFF LIKE:
-- BOTPLAY
-- OPTIMIZATION
-- NEW TRANSITIONS**
+
+**WHIT MORE STUFF LIKE:*8
+- **BOTPLAY**
+- **OPTIMIZATION**
+- **NEW TRANSITIONS**
 
 This is the Engine for Friday Night Funkin, game made by  [NinjaMuffin99](https://twitter.com/ninja_muffin99) 
 
