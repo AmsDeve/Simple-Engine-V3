@@ -44,6 +44,9 @@ class FreeplayState extends MusicBeatState
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
+	var intendedColor:Int;
+
+	var colorTween:FlxTween;
 
 	private var iconArray:Array<HealthIcon> = [];
 
@@ -54,7 +57,12 @@ class FreeplayState extends MusicBeatState
 		for (i in 0...initSonglist.length)
 			{
 				var data:Array<String> = initSonglist[i].split('|');
-				songs.push(new SongMetadata(data[0], Std.parseInt(data[2]), data[1]));
+				songs.push(new SongMetadata(data[0], Std.parseInt(data[2]), data[1], FlxColor.fromString(data[3])));
+
+			if (data[3] == null)
+				{
+				data == ['0xFFFFFFFF'];
+				}
 			}
 
 		/* 
@@ -80,7 +88,6 @@ class FreeplayState extends MusicBeatState
 		// LOAD CHARACTERS
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
-		bg.color = 0xFFA5004D;
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -167,25 +174,26 @@ class FreeplayState extends MusicBeatState
 		super.create();
 	}
 
-	public function addSong(songName:String, weekNum:Int, songCharacter:String)
-	{
-		songs.push(new SongMetadata(songName, weekNum, songCharacter));
-	}
-
-	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>)
+	public function addSong(songName:String, weekNum:Int, songCharacter:String, songColor:Int = 0xFFffffff)
+		{
+			songs.push(new SongMetadata(songName, weekNum, songCharacter, songColor));
+		}
+	
+	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>, colorSong:Int = 0xFFffffff)
 	{
 		if (songCharacters == null)
-			songCharacters = ['bf'];
+			songCharacters = ['dad'];
 
 		var num:Int = 0;
+		var color:Int = 0xFFffffff;
 		for (song in songs)
 		{
-			addSong(song, weekNum, songCharacters[num]);
+			addSong(song, weekNum, songCharacters[num], colorSong);
 
 			if (songCharacters.length != 1)
 				num++;
 		}
-	}
+		}
 
 	override function update(elapsed:Float)
 	{
@@ -238,6 +246,11 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
+			colorTween = FlxTween.color(bg, 1, bg.color, intendedColor, {
+				onComplete: function(twn:FlxTween) {
+					colorTween = null;
+				}
+			});
 			FlxG.switchState(new MainMenuState());
 
 			FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn});
@@ -268,7 +281,7 @@ class FreeplayState extends MusicBeatState
 			curDifficulty = 2;
 		if (curDifficulty > 2)
 			curDifficulty = 0;
-
+		
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		intendedMisses = Highscore.getMisses(songs[curSelected].songName, curDifficulty);
@@ -305,95 +318,15 @@ class FreeplayState extends MusicBeatState
 
 		// selector.y = (70 * curSelected) + 30;
 
-		//tutorial
-		if (curSelected == 0)
-			{
-				bg.color = 0xFFA5004D;
-			}
-
-			//week 1
-		if (curSelected == 1)
-			{
-				bg.color = 0xFFBD7BD3;
-			}
-			if (curSelected == 2)
-				{
-					bg.color = 0xFFBD7BD3;
+		switch (curSelected)
+		{
+		 default:
+			colorTween = FlxTween.color(bg, 0.1, bg.color, songs[curSelected].weekColor, {
+				onComplete: function(twn:FlxTween) {
+					colorTween = null;
 				}
-				if (curSelected == 3)
-					{
-						bg.color = 0xFFBD7BD3;
-					}
-
-		//week 2
-		if (curSelected == 4)
-			{
-				bg.color = 0xFFdd947f;
-			}
-			if (curSelected == 5)
-				{
-					bg.color = 0xFFdd947f;
-				}
-				if (curSelected == 6)
-					{
-						bg.color = 0xFFF2FF6D;
-					}
-		
-		//week 3
-		if (curSelected == 7)
-			{
-				bg.color = 0xFFB7D855;
-			}
-			if (curSelected == 8)
-				{
-					bg.color = 0xFFB7D855;
-				}
-				if (curSelected == 9)
-					{
-						bg.color = 0xFFB7D855;
-					}
-
-		//week 4
-		if (curSelected == 10)
-			{
-				bg.color = 0xFFD8558E;
-			}
-			if (curSelected == 11)
-				{
-					bg.color = 0xFFD8558E;
-				}
-				if (curSelected == 12)
-					{
-						bg.color = 0xFFD8558E;
-					}
-
-		//week 5
-		if (curSelected == 13)
-			{
-				bg.color = 0xFFcb6ab4;
-			}
-			if (curSelected == 14)
-				{
-					bg.color = 0xFFcb6ab4;
-				}
-				if (curSelected == 15)
-					{
-						bg.color = 0xFFF2FF6D;
-					}
-
-		//week 6
-		if (curSelected == 16)
-			{
-				bg.color = 0xFFFFAA6F;
-			}
-			if (curSelected == 17)
-				{
-					bg.color = 0xFFFFAA6F;
-				}
-				if (curSelected == 18)
-					{
-						bg.color = 0xFFFF3C6E;
-					}
+			});
+		}
 
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
@@ -434,11 +367,13 @@ class SongMetadata
 	public var songName:String = "";
 	public var week:Int = 0;
 	public var songCharacter:String = "";
+	public var weekColor:Int = 0xFFffffff;
 
-	public function new(song:String, week:Int, songCharacter:String)
+	public function new(song:String, week:Int, songCharacter:String, weekColor:Int = 0xFFffffff)
 	{
 		this.songName = song;
 		this.week = week;
+		this.weekColor = weekColor;
 		this.songCharacter = songCharacter;
 	}
 }
