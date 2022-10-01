@@ -1,4 +1,4 @@
-# Stylus Engine(ALTERNATIVE VERSION)
+# Stylus Engine V3!!
 
 ![logo](art/simpleEngineLogo.png)
 
@@ -10,6 +10,8 @@
 - **BOTPLAY**
 - **OPTIMIZATION**
 - **NEW TRANSITIONS**
+- **FREEPLAY SMOOTH COLOR SWITCH**
+- **STROY MENU IN JSON**
 
 This is the Engine for Friday Night Funkin, game made by  [NinjaMuffin99](https://twitter.com/ninja_muffin99) 
 
