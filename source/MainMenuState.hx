@@ -29,7 +29,7 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
@@ -186,11 +186,9 @@ class MainMenuState extends MusicBeatState
 									case 0:
 										        FlxG.switchState(new StoryMenuState());
 									case 1:
-												FlxG.switchState(new FreeplayState());
+											FlxG.switchState(new FreeplayState());
 									case 2:
-										        FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
-									case 3:
-												FlxG.switchState(new OptionsMenu());
+											FlxG.switchState(new OptionsMenu());
 
 								}
 							});
